@@ -275,22 +275,60 @@ function validateMessage() {
             throw "Please enter your Message text.";
         } else {
             errorDiv.style.display = "none";
-            errorDiv.innerHTML = msg;
+            errorDiv.innerHTML = "";
             errorDiv.style.background = "white";
         }
-        if (fieldsetValidity === false) {
-            throw "Please enter your Custom Message text.";
-        } else {
-            errorDiv.style.display = "none";
-            errorDiv.innerHTML = "";
-        }
-
     } catch (msg) {
         errorDiv.style.display = "block";
         errorDiv.innerHTML = msg;
         msgBox.style.background = "rgb(255,233,233)";
         formValidity = false;
     }
+    if (fieldsetValidity === false) {
+        throw "Please enter your Custom Message text.";
+    } else {
+        errorDiv.style.display = "none";
+        errorDiv.innerHTML = "";
+    }
+
+}
+// function to validate create account
+function validateCreateAccount() {
+    var errorDiv = document.querySelectorAll("#createAccount" + " .errorMessage")[0];
+    var usernameElement = document.getElementById("username");
+    var pass1Element = document.getElementById("pass1");
+    var pass2Element = document.getElementById("pass2");
+    usernameElement.style.background = "white";
+    pass1Element.style.background = "white";
+    pass2Element.style.background = "white";
+    var passwordMismatch = false;
+    var invColor = "rgb(255,233,233)";
+    var fieldsetValidity = true;
+    try {
+        if (usernameElement.value !== "" && pass1Element.value !== "" && pass2Element.value !== "") {
+            if (pass1Element.value !== pass2Element.value) {
+                passwordMismatch = true;
+                throw "Passwords entered do not match, please re-enter.";
+            }
+        } else if (usernameElement.value === "" && pass1Element.value === "" && pass2Element.value === "") {
+            fieldsetValidity = true;
+        } else {
+            fieldsetValidity = false;
+            throw "Please enter all fields to Create Account"
+        }
+    } catch (msg) {
+        errorDiv.style.display = "block";
+        errorDiv.innerHTML = msg;
+        pass1Element.style.background = invColor;
+        pass2Element.style.background = invColor;
+        formValidity = false;
+        if (passwordMismatch) {
+            usernameElement.style.background === "white";
+        } else {
+            usernameElement.style.background = invColor;
+        }
+    }
+
 }
 
 // function to validate entire form
@@ -306,6 +344,7 @@ function validateForm(evt) {
     validateDeliveryDate();
     validatePayment();
     validateMessage();
+    validateCreateAccount();
 
     if (formValidity === true) {
         document.getElementById("errorText").innerHTML = "";
